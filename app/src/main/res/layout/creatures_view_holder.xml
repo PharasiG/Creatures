@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/linearLayout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/creature_image"
+        android:contentDescription="@string/cd_creature_image"
+        android:layout_width="@dimen/creature_view_holder_height"
+        android:layout_height="@dimen/creature_view_holder_height"
+        android:layout_margin="@dimen/padding_standard"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/creature_dino_01" />
+
+    <TextView
+        android:id="@+id/creature_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/padding_standard"
+        android:textColor="#000000"
+        android:textSize="@dimen/creature_name_text_size"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/creature_image"
+        app:layout_constraintStart_toEndOf="@+id/creature_image"
+        app:layout_constraintTop_toTopOf="@+id/creature_image"
+        tools:text="Full Name" />
+</androidx.constraintlayout.widget.ConstraintLayout>
