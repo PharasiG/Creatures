@@ -31,7 +31,8 @@ class CreaturesAdapter(private val creatures: List<Creature>) :
         fun bind(creature: Creature) {
             val context = itemView.context
             creature_image.setImageResource(
-                context.resources.getIdentifier(creature.uri, null, context.packageName))
+                context.resources.getIdentifier(creature.uri, null, context.packageName)
+            )
             creature_name.text = creature.fullName
         }
     }
