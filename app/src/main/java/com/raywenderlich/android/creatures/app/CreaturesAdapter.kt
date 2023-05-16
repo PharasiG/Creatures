@@ -34,6 +34,6 @@ class CreaturesAdapter(private val creatures: List<Creature>) :
                 context.resources.getIdentifier(creature.uri, null, context.packageName))
             creature_name.text = creature.fullName
         }
-    }p
+    }
 }
 
