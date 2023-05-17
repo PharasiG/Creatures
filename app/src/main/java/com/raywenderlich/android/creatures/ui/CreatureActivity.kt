@@ -119,4 +119,13 @@ class CreatureActivity : AppCompatActivity() {
             }
         }
     }
+
+    override fun onBackPressed() {
+//        val intent = Intent()
+//        setResult(FavoritesFragment.FAVORITE_REQ_CODE, intent)
+//        finish()
+        setResult(FavoritesFragment.FAVORITE_REQ_CODE)
+
+        super.onBackPressed()
+    }
 }

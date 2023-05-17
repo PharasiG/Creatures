@@ -71,11 +71,18 @@ class FavoritesFragment : Fragment(), FavoritesAdapter.CreatureClicked {
         favouritesRecyclerView.layoutManager = LinearLayoutManager(activity)
     }
 
+//    override fun onResume() {
+//        super.onResume()
+//
+//        favouritesRecyclerView.adapter = FavoritesAdapter(getFavoriteCreatures(), this)
+//    }
+
     @Deprecated("Deprecated in Java")
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
 
         if (requestCode == FAVORITE_REQ_CODE) {
+            favouritesRecyclerView.adapter = FavoritesAdapter(getFavoriteCreatures(), this)
         }
     }
 
@@ -83,6 +90,7 @@ class FavoritesFragment : Fragment(), FavoritesAdapter.CreatureClicked {
         activity?.also {
             val intent = CreatureActivity.newIntent(it, id)
             startActivityForResult(intent, FAVORITE_REQ_CODE)
+//            startActivity(intent)
         }
     }
 
