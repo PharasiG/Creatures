@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
 import com.raywenderlich.android.creatures.model.Creature
+import com.raywenderlich.android.creatures.ui.CreatureActivity
 
 class CreaturesAdapter(private val creatures: List<Creature>) :
     RecyclerView.Adapter<CreaturesAdapter.ViewHolder>() {
@@ -24,16 +25,29 @@ class CreaturesAdapter(private val creatures: List<Creature>) :
         holder.bind(creatures[position])
     }
 
-    class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val creature_image = itemView.findViewById<ImageView>(R.id.creature_image)
-        val creature_name = itemView.findViewById<TextView>(R.id.creature_name)
+    class ViewHolder(itemView: View) : View.OnClickListener, RecyclerView.ViewHolder(itemView) {
+        private lateinit var creature: Creature
+        private val creatureImage: ImageView = itemView.findViewById(R.id.creature_image)
+        private val creatureName: TextView = itemView.findViewById(R.id.creature_name)
+        private val creatureNickName: TextView = itemView.findViewById(R.id.creature_nick_name)
+        private val context = itemView.context
+
+        init {
+            itemView.setOnClickListener(this)
+        }
 
         fun bind(creature: Creature) {
-            val context = itemView.context
-            creature_image.setImageResource(
+            this.creature = creature
+            creatureImage.setImageResource(
                 context.resources.getIdentifier(creature.uri, null, context.packageName)
             )
-            creature_name.text = creature.fullName
+            creatureName.text = creature.fullName
+            creatureNickName.text = creature.nickname
+        }
+
+        override fun onClick(v: View?) {
+            val intent = CreatureActivity.newIntent(context, creature.id)
+            context.startActivity(intent)
         }
     }
 }
