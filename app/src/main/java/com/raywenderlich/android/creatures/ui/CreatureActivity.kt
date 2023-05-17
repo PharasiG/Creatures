@@ -33,84 +33,90 @@ package com.raywenderlich.android.creatures.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.raywenderlich.android.creatures.R
 import com.raywenderlich.android.creatures.databinding.ActivityCreatureBinding
-import com.raywenderlich.android.creatures.model.Favorites
 import com.raywenderlich.android.creatures.model.Creature
 import com.raywenderlich.android.creatures.model.CreatureStore
+import com.raywenderlich.android.creatures.model.Favorites
 
 class CreatureActivity : AppCompatActivity() {
 
-  private lateinit var creature: Creature
-  private lateinit var binding: ActivityCreatureBinding
+    private lateinit var creature: Creature
+    private lateinit var binding: ActivityCreatureBinding
 
-  companion object {
-    private const val EXTRA_CREATURE_ID = "EXTRA_CREATURE_ID"
+    companion object {
+        private const val EXTRA_CREATURE_ID = "EXTRA_CREATURE_ID"
 
-    fun newIntent(context: Context, creatureId: Int): Intent {
-      val intent = Intent(context, CreatureActivity::class.java)
-      intent.putExtra(EXTRA_CREATURE_ID, creatureId)
-      return intent
+        fun newIntent(context: Context, creatureId: Int): Intent {
+            val intent = Intent(context, CreatureActivity::class.java)
+            intent.putExtra(EXTRA_CREATURE_ID, creatureId)
+            return intent
+        }
     }
-  }
 
-  override fun onCreate(savedInstanceState: Bundle?) {
-    super.onCreate(savedInstanceState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
-    binding = ActivityCreatureBinding.inflate(layoutInflater)
-    setContentView(binding.root)
+        binding = ActivityCreatureBinding.inflate(layoutInflater)
+        setContentView(binding.root)
 
-    setupCreature()
-    setupTitle()
-    setupViews()
-    setupFavoriteButton()
-  }
-
-  private fun setupCreature() {
-    val creatureById = CreatureStore.getCreatureById(intent.getIntExtra(EXTRA_CREATURE_ID, 1))
-    if (creatureById == null) {
-      Toast.makeText(this, getString(R.string.invalid_creature), Toast.LENGTH_SHORT).show()
-      finish()
-    } else {
-      creature = creatureById
+        setupCreature()
+        setupTitle()
+        setupViews()
+        setupFavoriteButton()
     }
-  }
 
-  private fun setupTitle() {
-    title = String.format(getString(R.string.detail_title_format), creature.nickname)
-    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-  }
-
-  private fun setupViews() {
-    binding.headerImage.setImageResource(resources.getIdentifier(creature.uri, null, packageName))
-    binding.fullName.text = creature.fullName
-    binding.planet.text = creature.planet
-  }
-
-  private fun setupFavoriteButton() {
-    setupFavoriteButtonImage(creature)
-    setupFavoriteButtonClickListener(creature)
-  }
-
-  private fun setupFavoriteButtonImage(creature: Creature) {
-    if (creature.isFavorite) {
-      binding.favoriteButton.setImageDrawable(getDrawable(R.drawable.ic_favorite_black_24dp))
-    } else {
-      binding.favoriteButton.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_black_24dp))
+    private fun setupCreature() {
+        val creatureById = CreatureStore.getCreatureById(intent.getIntExtra(EXTRA_CREATURE_ID, 1))
+        if (creatureById == null) {
+            Toast.makeText(this, getString(R.string.invalid_creature), Toast.LENGTH_SHORT).show()
+            finish()
+        } else {
+            creature = creatureById
+        }
     }
-  }
 
-  private fun setupFavoriteButtonClickListener(creature: Creature) {
-    binding.favoriteButton.setOnClickListener { _ ->
-      if (creature.isFavorite) {
-        binding.favoriteButton.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_black_24dp))
-        Favorites.removeFavorite(creature, this)
-      } else {
-        binding.favoriteButton.setImageDrawable(getDrawable(R.drawable.ic_favorite_black_24dp))
-        Favorites.addFavorite(creature, this)
-      }
+    private fun setupTitle() {
+        title = String.format(getString(R.string.detail_title_format), creature.nickname)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
-  }
+
+    private fun setupViews() {
+        binding.headerImage.setImageResource(
+            resources.getIdentifier(
+                creature.uri,
+                null,
+                packageName
+            )
+        )
+        binding.fullName.text = creature.fullName
+        binding.planet.text = creature.planet
+    }
+
+    private fun setupFavoriteButton() {
+        setupFavoriteButtonImage(creature)
+        setupFavoriteButtonClickListener(creature)
+    }
+
+    private fun setupFavoriteButtonImage(creature: Creature) {
+        if (creature.isFavorite) {
+            binding.favoriteButton.setImageDrawable(getDrawable(R.drawable.ic_favorite_black_24dp))
+        } else {
+            binding.favoriteButton.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_black_24dp))
+        }
+    }
+
+    private fun setupFavoriteButtonClickListener(creature: Creature) {
+        binding.favoriteButton.setOnClickListener { _ ->
+            if (creature.isFavorite) {
+                binding.favoriteButton.setImageDrawable(getDrawable(R.drawable.ic_favorite_border_black_24dp))
+                Favorites.removeFavorite(creature, this)
+            } else {
+                binding.favoriteButton.setImageDrawable(getDrawable(R.drawable.ic_favorite_black_24dp))
+                Favorites.addFavorite(creature, this)
+            }
+        }
+    }
 }

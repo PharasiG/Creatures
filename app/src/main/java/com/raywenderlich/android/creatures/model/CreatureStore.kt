@@ -67,6 +67,8 @@ object CreatureStore {
 
   fun getCreatures() = creatures
 
+  fun getFavoriteCreatures() = creatures.filter { it.isFavorite }
+
   fun getFoodById(id: Int) = foods.firstOrNull { it.id == id }
 
   private fun loadJSONFromAsset(filename: String, context: Context): String? {

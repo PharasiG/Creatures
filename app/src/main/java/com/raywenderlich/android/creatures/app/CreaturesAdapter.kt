@@ -50,5 +50,6 @@ class CreaturesAdapter(private val creatures: List<Creature>) :
             context.startActivity(intent)
         }
     }
+
 }
 
