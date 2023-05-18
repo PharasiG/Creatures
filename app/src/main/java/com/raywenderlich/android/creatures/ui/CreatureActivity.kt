@@ -33,18 +33,25 @@ package com.raywenderlich.android.creatures.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
+import com.raywenderlich.android.creatures.app.FoodAdapter
 import com.raywenderlich.android.creatures.databinding.ActivityCreatureBinding
 import com.raywenderlich.android.creatures.model.Creature
 import com.raywenderlich.android.creatures.model.CreatureStore
+import com.raywenderlich.android.creatures.model.CreatureStore.foodImages
+import com.raywenderlich.android.creatures.model.CreatureStore.getFoodById
 import com.raywenderlich.android.creatures.model.Favorites
 
 class CreatureActivity : AppCompatActivity() {
 
     private lateinit var creature: Creature
     private lateinit var binding: ActivityCreatureBinding
+    private lateinit var foodRecyclerView: RecyclerView
 
     companion object {
         private const val EXTRA_CREATURE_ID = "EXTRA_CREATURE_ID"
@@ -66,6 +73,16 @@ class CreatureActivity : AppCompatActivity() {
         setupTitle()
         setupViews()
         setupFavoriteButton()
+        setupFoods()
+    }
+
+    private fun setupFoods() {
+        foodRecyclerView = binding.foodRecyclerView
+//        foodRecyclerView.adapter = FoodAdapter(mutableListOf())
+        foodRecyclerView.adapter = FoodAdapter(foodImages(creature).toMutableList())
+        foodRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+
+//        (foodRecyclerView.adapter as FoodAdapter).updateFoods(creature.foodImages)
     }
 
     private fun setupCreature() {

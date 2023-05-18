@@ -30,6 +30,7 @@
 
 package com.raywenderlich.android.creatures.model
 
+import com.raywenderlich.android.creatures.model.CreatureStore.getFoodById
 
 data class Creature(
   val id: Int,
