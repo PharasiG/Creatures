@@ -10,7 +10,7 @@ import com.raywenderlich.android.creatures.R
 import com.raywenderlich.android.creatures.model.Creature
 import com.raywenderlich.android.creatures.ui.CreatureActivity
 
-class CreaturesAdapter(private val creatures: List<Creature>) :
+class CreaturesAdapter(private val creatures: MutableList<Creature>) :
     RecyclerView.Adapter<CreaturesAdapter.ViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -23,6 +23,12 @@ class CreaturesAdapter(private val creatures: List<Creature>) :
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         holder.bind(creatures[position])
+    }
+
+    fun updateFavorites(favoriteCreatures: List<Creature>) {
+        creatures.clear()
+        creatures.addAll(favoriteCreatures)
+        notifyDataSetChanged()
     }
 
     class ViewHolder(itemView: View) : View.OnClickListener, RecyclerView.ViewHolder(itemView) {

@@ -61,7 +61,7 @@ class AllFragment : Fragment() {
     super.onViewCreated(view, savedInstanceState)
 
     creaturesRecyclerView = view.findViewById(R.id.creature_recycler_view)
-    creaturesRecyclerView.adapter = CreaturesAdapter(getCreatures())
+    creaturesRecyclerView.adapter = CreaturesAdapter(getCreatures().toMutableList())
     creaturesRecyclerView.layoutManager = LinearLayoutManager(activity)
 
   }

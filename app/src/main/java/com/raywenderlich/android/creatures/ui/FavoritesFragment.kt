@@ -30,8 +30,6 @@
 
 package com.raywenderlich.android.creatures.ui
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -40,16 +38,15 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
-import com.raywenderlich.android.creatures.app.FavoritesAdapter
+import com.raywenderlich.android.creatures.app.CreaturesAdapter
 import com.raywenderlich.android.creatures.model.CreatureStore.getFavoriteCreatures
 
 
-class FavoritesFragment : Fragment(), FavoritesAdapter.CreatureClicked {
+class FavoritesFragment : Fragment(){
 
     private lateinit var favouritesRecyclerView: RecyclerView
 
     companion object {
-        const val FAVORITE_REQ_CODE = 100
         fun newInstance(): FavoritesFragment {
             return FavoritesFragment()
         }
@@ -63,27 +60,22 @@ class FavoritesFragment : Fragment(), FavoritesAdapter.CreatureClicked {
         return inflater.inflate(R.layout.fragment_favorites, container, false)
     }
 
+    override fun onResume() {
+        super.onResume()
+
+        activity?.let {
+            getFavoriteCreatures(it)?.let {
+                (favouritesRecyclerView.adapter as CreaturesAdapter).updateFavorites(it)
+            }
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         favouritesRecyclerView = view.findViewById(R.id.favourites_recycler_view)
-        favouritesRecyclerView.adapter = FavoritesAdapter(getFavoriteCreatures(), this)
+        favouritesRecyclerView.adapter = CreaturesAdapter(mutableListOf())
         favouritesRecyclerView.layoutManager = LinearLayoutManager(activity)
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if (requestCode == FAVORITE_REQ_CODE) {
-        }
-    }
-
-    override fun onCreatureClick(id: Int) {
-        activity?.also {
-            val intent = CreatureActivity.newIntent(it, id)
-            startActivityForResult(intent, FAVORITE_REQ_CODE)
-        }
     }
 
 }
