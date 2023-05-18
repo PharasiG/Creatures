@@ -33,7 +33,6 @@ package com.raywenderlich.android.creatures.ui
 import android.content.Context
 import android.content.Intent
 import android.os.Bundle
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -43,8 +42,7 @@ import com.raywenderlich.android.creatures.app.FoodAdapter
 import com.raywenderlich.android.creatures.databinding.ActivityCreatureBinding
 import com.raywenderlich.android.creatures.model.Creature
 import com.raywenderlich.android.creatures.model.CreatureStore
-import com.raywenderlich.android.creatures.model.CreatureStore.foodImages
-import com.raywenderlich.android.creatures.model.CreatureStore.getFoodById
+import com.raywenderlich.android.creatures.model.CreatureStore.getFood
 import com.raywenderlich.android.creatures.model.Favorites
 
 class CreatureActivity : AppCompatActivity() {
@@ -79,8 +77,8 @@ class CreatureActivity : AppCompatActivity() {
     private fun setupFoods() {
         foodRecyclerView = binding.foodRecyclerView
 //        foodRecyclerView.adapter = FoodAdapter(mutableListOf())
-        foodRecyclerView.adapter = FoodAdapter(foodImages(creature).toMutableList())
-        foodRecyclerView.layoutManager = LinearLayoutManager(this, RecyclerView.HORIZONTAL, false)
+        foodRecyclerView.adapter = FoodAdapter(getFood(creature).toMutableList())
+        foodRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
 
 //        (foodRecyclerView.adapter as FoodAdapter).updateFoods(creature.foodImages)
     }

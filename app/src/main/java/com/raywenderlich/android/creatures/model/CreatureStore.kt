@@ -74,7 +74,7 @@ object CreatureStore {
 
     fun getFoodById(id: Int) = foods.firstOrNull { it.id == id }
 
-    fun foodImages(creature: Creature) : List<Food> = creature.foods.mapNotNull { getFoodById(it) }
+    fun getFood(creature: Creature) : List<Food> = creature.foods.mapNotNull { getFoodById(it) }
 
     private fun loadJSONFromAsset(filename: String, context: Context): String? {
         var json: String? = null
