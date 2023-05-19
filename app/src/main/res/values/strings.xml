@@ -7,4 +7,5 @@
     <string name="content_description_favorite_button">Creature Favorite Button</string>
     <string name="detail_title_format">Creature: %1$s</string>
     <string name="cd_creature_image">creature image</string>
+    <string name="cd_creature_image_in_card_view">creature image in card view</string>
 </resources>

@@ -23,11 +23,11 @@ class FoodAdapter(private val foods: MutableList<Food>) :
         holder.bind(foods[position])
     }
 
-    fun updateFoods(food: List<Food>) {
-        foods.clear()
-        foods.addAll(food)
-        notifyDataSetChanged()
-    }
+//    fun updateFoods(food: List<Food>) {
+//        foods.clear()
+//        foods.addAll(food)
+//        notifyDataSetChanged()
+//    }
 
     class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val foodImage = itemView.findViewById<ImageView>(R.id.food_image)
