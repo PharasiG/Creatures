@@ -57,7 +57,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_favorite_border_black_24dp"
-        app:tint="@color/colorAccent" />
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/food_recycler_view"

@@ -45,7 +45,6 @@ import com.raywenderlich.android.creatures.databinding.FragmentAllBinding
 import com.raywenderlich.android.creatures.model.CreatureStore
 import com.raywenderlich.android.creatures.model.CreatureStore.getCreatures
 
-
 class AllFragment : Fragment() {
 
   private lateinit var creaturesRecyclerView: RecyclerView
