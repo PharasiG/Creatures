@@ -18,6 +18,8 @@ import com.raywenderlich.android.creatures.R
 import com.raywenderlich.android.creatures.model.Creature
 import com.raywenderlich.android.creatures.ui.CreatureActivity
 import android.os.Handler
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 
 
 class CreaturesCardAdapter(private val creatures: MutableList<Creature>) :

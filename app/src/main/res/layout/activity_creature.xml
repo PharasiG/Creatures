@@ -21,14 +21,12 @@
         android:id="@+id/fullName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_standard"
         android:layout_marginTop="@dimen/padding_standard"
-        android:layout_marginEnd="@dimen/padding_standard"
         android:textColor="@android:color/black"
         android:textSize="@dimen/detail_name_text_size"
         android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/headerImage"
+        app:layout_constraintStart_toStartOf="@+id/headerImage"
         app:layout_constraintTop_toBottomOf="@+id/headerImage"
         tools:text="FirstName LastName" />
 
@@ -36,13 +34,13 @@
         android:id="@+id/planet"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="@dimen/padding_standard"
         android:layout_marginTop="@dimen/padding_half"
-        android:layout_marginEnd="@dimen/padding_standard"
         android:textSize="@dimen/detail_planet_text_size"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/fullName"
+        app:layout_constraintStart_toStartOf="@+id/fullName"
         app:layout_constraintTop_toBottomOf="@+id/fullName"
+        app:layout_constraintVertical_bias="0.01"
         tools:text="Planet" />
 
     <ImageButton
@@ -56,14 +54,14 @@
         android:scaleType="fitXY"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_favorite_border_black_24dp"
-        />
+        app:srcCompat="@drawable/ic_favorite_border_black_24dp" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/food_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/food_image_height"
-        android:layout_marginTop="@dimen/padding_standard"
+        android:layout_height="0dp"
+        android:layout_margin="@dimen/padding_standard"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/planet" />

@@ -8,4 +8,6 @@
     <string name="detail_title_format">Creature: %1$s</string>
     <string name="cd_creature_image">creature image</string>
     <string name="cd_creature_image_in_card_view">creature image in card view</string>
+    <string name="menu_span_1">Span 1</string>
+    <string name="menu_span_2">Span 2</string>
 </resources>

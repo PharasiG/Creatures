@@ -32,6 +32,9 @@ package com.raywenderlich.android.creatures.ui
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
@@ -45,11 +48,23 @@ import com.raywenderlich.android.creatures.model.CreatureStore.getCreatures
 class AllFragment : Fragment() {
 
     private lateinit var creaturesRecyclerView: RecyclerView
+    private lateinit var layoutManager: StaggeredGridLayoutManager
+
 
     companion object {
         fun newInstance(): AllFragment {
             return AllFragment()
         }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_all, menu)
     }
 
     override fun onCreateView(
@@ -65,7 +80,31 @@ class AllFragment : Fragment() {
 
         creaturesRecyclerView = view.findViewById(R.id.creature_recycler_view)
         creaturesRecyclerView.adapter = CreaturesCardAdapter(getCreatures().toMutableList())
-        val layoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
+        layoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
         creaturesRecyclerView.layoutManager = layoutManager
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val id = item.itemId
+        when (id) {
+            R.id.action_span_1 -> {
+                showListView()
+                return true
+            }
+
+            R.id.action_span_2 -> {
+                showGridView()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun showListView() {
+        layoutManager.spanCount = 1
+    }
+
+    private fun showGridView() {
+        layoutManager.spanCount = 2
     }
 }

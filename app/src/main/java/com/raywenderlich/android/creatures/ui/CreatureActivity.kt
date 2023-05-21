@@ -35,6 +35,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
@@ -78,7 +79,7 @@ class CreatureActivity : AppCompatActivity() {
         foodRecyclerView = binding.foodRecyclerView
 //        foodRecyclerView.adapter = FoodAdapter(mutableListOf())
         foodRecyclerView.adapter = FoodAdapter(getFood(creature).toMutableList())
-        foodRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+        foodRecyclerView.layoutManager = GridLayoutManager(this, 3)
 
 //        (foodRecyclerView.adapter as FoodAdapter).updateFoods(creature.foodImages)
     }
