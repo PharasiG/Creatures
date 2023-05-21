@@ -44,9 +44,9 @@ class CreaturesCardAdapter(private val creatures: MutableList<Creature>) :
     class ViewHolder(itemView: View) : View.OnClickListener, RecyclerView.ViewHolder(itemView) {
         private lateinit var creature: Creature
         private val creatureCard: CardView = itemView.findViewById(R.id.creatureCard)
-        private val nicknameHolder: LinearLayout = itemView.findViewById(R.id.nicknameHolder)
+        private val nameHolder: LinearLayout = itemView.findViewById(R.id.nameHolder)
         private val creatureImage: ImageView = itemView.findViewById(R.id.creature_image)
-        private val nickName: TextView = itemView.findViewById(R.id.nickname)
+        private val fullName: TextView = itemView.findViewById(R.id.fullName)
         private val context = itemView.context
 
         init {
@@ -58,7 +58,7 @@ class CreaturesCardAdapter(private val creatures: MutableList<Creature>) :
             val imageResource =
                 context.resources.getIdentifier(creature.uri, null, context.packageName)
             creatureImage.setImageResource(imageResource)
-            nickName.text = creature.nickname
+            fullName.text = creature.fullName
             setBackgroundColors(imageResource)
         }
 
@@ -91,9 +91,9 @@ class CreaturesCardAdapter(private val creatures: MutableList<Creature>) :
 
                 val handler = Handler(Looper.getMainLooper()) {
                     creatureCard.setBackgroundColor(backgroundColor)
-                    nicknameHolder.setBackgroundColor(backgroundColor)
+                    nameHolder.setBackgroundColor(backgroundColor)
                     val textColor = if (isColorDark(backgroundColor)) Color.WHITE else Color.BLACK
-                    nickName.setTextColor(textColor)
+                    fullName.setTextColor(textColor)
                     true
                 }
                 handler.sendEmptyMessage(0)
