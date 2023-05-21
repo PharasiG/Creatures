@@ -31,39 +31,44 @@
 package com.raywenderlich.android.creatures.ui
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
-import com.raywenderlich.android.creatures.app.CreaturesAdapter
 import com.raywenderlich.android.creatures.app.CreaturesCardAdapter
-import com.raywenderlich.android.creatures.databinding.FragmentAllBinding
-import com.raywenderlich.android.creatures.model.CreatureStore
 import com.raywenderlich.android.creatures.model.CreatureStore.getCreatures
 
 class AllFragment : Fragment() {
 
-  private lateinit var creaturesRecyclerView: RecyclerView
-  companion object {
-    fun newInstance(): AllFragment {
-      return AllFragment()
+    private lateinit var creaturesRecyclerView: RecyclerView
+
+    companion object {
+        fun newInstance(): AllFragment {
+            return AllFragment()
+        }
     }
-  }
 
-  override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
-    return inflater.inflate(R.layout.fragment_all, container, false)
-  }
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        return inflater.inflate(R.layout.fragment_all, container, false)
+    }
 
-  override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-    super.onViewCreated(view, savedInstanceState)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-    creaturesRecyclerView = view.findViewById(R.id.creature_recycler_view)
-    creaturesRecyclerView.adapter = CreaturesCardAdapter(getCreatures().toMutableList())
-    creaturesRecyclerView.layoutManager = GridLayoutManager(activity, 2)
+        creaturesRecyclerView = view.findViewById(R.id.creature_recycler_view)
+        creaturesRecyclerView.adapter = CreaturesCardAdapter(getCreatures().toMutableList())
+        val layoutManager = GridLayoutManager(activity, 2)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int) = if ((position + 1) % 3 == 0) 2 else 1
+        }
+        creaturesRecyclerView.layoutManager = layoutManager
 
-  }
+    }
 }

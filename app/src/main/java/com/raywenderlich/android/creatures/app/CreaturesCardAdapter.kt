@@ -3,6 +3,7 @@ package com.raywenderlich.android.creatures.app
 import android.content.Context
 import android.graphics.BitmapFactory
 import android.graphics.Color
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
 import com.raywenderlich.android.creatures.model.Creature
 import com.raywenderlich.android.creatures.ui.CreatureActivity
+import android.os.Handler
+
 
 class CreaturesCardAdapter(private val creatures: MutableList<Creature>) :
     RecyclerView.Adapter<CreaturesCardAdapter.ViewHolder>() {
@@ -76,21 +79,43 @@ class CreaturesCardAdapter(private val creatures: MutableList<Creature>) :
 //        }
 
         private fun setBackgroundColors(imageresource: Int) {
-            val image = BitmapFactory.decodeResource(context.resources, imageresource)
-            Palette.from(image).generate { palette ->
-                palette?.let {
-                    val backgroundColor = it.getDominantColor(
-                        ContextCompat.getColor(
-                            context, R.color.colorPrimaryDark
-                        )
-                    )
+            //being performed in the background thread, so as to not cause lag, extracting palette from so many images
+            //will be a heavy task on the main thread
+            Thread {
+                val bitmap = BitmapFactory.decodeResource(context.resources, imageresource)
+                val palette = Palette.from(bitmap).generate()
+
+                val backgroundColor = palette.getDominantColor(
+                    ContextCompat.getColor(context, R.color.colorPrimaryDark)
+                )
+
+                val handler = Handler(Looper.getMainLooper()) {
                     creatureCard.setBackgroundColor(backgroundColor)
                     nicknameHolder.setBackgroundColor(backgroundColor)
                     val textColor = if (isColorDark(backgroundColor)) Color.WHITE else Color.BLACK
                     nickName.setTextColor(textColor)
+                    true
                 }
-            }
+                handler.sendEmptyMessage(0)
+            }.start()
         }
+
+//        private fun setBackgroundColors(imageresource: Int) {
+//            val image = BitmapFactory.decodeResource(context.resources, imageresource)
+//            Palette.from(image).generate { palette ->
+//                palette?.let {
+//                    val backgroundColor = it.getDominantColor(
+//                        ContextCompat.getColor(
+//                            context, R.color.colorPrimaryDark
+//                        )
+//                    )
+//                    creatureCard.setBackgroundColor(backgroundColor)
+//                    nicknameHolder.setBackgroundColor(backgroundColor)
+//                    val textColor = if (isColorDark(backgroundColor)) Color.WHITE else Color.BLACK
+//                    nickName.setTextColor(textColor)
+//                }
+//            }
+//        }
 
         private fun isColorDark(color: Int): Boolean {
             val darkness = 1 - (0.299 * Color.red(color) +
