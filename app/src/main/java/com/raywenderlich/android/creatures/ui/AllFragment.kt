@@ -30,6 +30,7 @@
 
 package com.raywenderlich.android.creatures.ui
 
+import android.content.res.Resources
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.Menu
@@ -41,6 +42,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.google.android.material.resources.MaterialResources.getDimensionPixelSize
 import com.raywenderlich.android.creatures.R
 import com.raywenderlich.android.creatures.app.CreaturesCardAdapter
 import com.raywenderlich.android.creatures.model.CreatureStore.getCreatures
@@ -49,7 +51,13 @@ class AllFragment : Fragment() {
 
     private lateinit var creaturesRecyclerView: RecyclerView
     private lateinit var layoutManager: StaggeredGridLayoutManager
+    private lateinit var listItemDecor: SpacingItemDecoration
+    private lateinit var gridItemDecor: SpacingItemDecoration
+    private var spanState = SpanState.GRID
 
+    private enum class SpanState {
+        LIST, GRID
+    }
 
     companion object {
         fun newInstance(): AllFragment {
@@ -60,11 +68,6 @@ class AllFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setHasOptionsMenu(true)
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
-        inflater.inflate(R.menu.menu_all, menu)
     }
 
     override fun onCreateView(
@@ -78,33 +81,66 @@ class AllFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val spacing = resources.getDimensionPixelOffset(R.dimen.creature_card_grid_layout_margin)
+        listItemDecor = SpacingItemDecoration(spacing, 1)
+        gridItemDecor = SpacingItemDecoration(spacing, 2)
+
         creaturesRecyclerView = view.findViewById(R.id.creature_recycler_view)
         creaturesRecyclerView.adapter = CreaturesCardAdapter(getCreatures().toMutableList())
         layoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
         creaturesRecyclerView.layoutManager = layoutManager
+        creaturesRecyclerView.addItemDecoration(gridItemDecor)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_span, menu)
+    }
+
+    override fun onPrepareOptionsMenu(menu: Menu) {
+        super.onPrepareOptionsMenu(menu)
+
+        val listMenuButton = menu.findItem(R.id.action_span_1)
+        val gridMenuButton = menu.findItem(R.id.action_span_2)
+
+        when (spanState) {
+            SpanState.GRID -> {
+                gridMenuButton.isEnabled = false
+                listMenuButton.isEnabled = true
+            }
+
+            SpanState.LIST -> {
+                gridMenuButton.isEnabled = true
+                listMenuButton.isEnabled = false
+            }
+        }
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         val id = item.itemId
         when (id) {
             R.id.action_span_1 -> {
-                showListView()
+                spanState = SpanState.LIST
+                updateRecyclerView(1, listItemDecor, gridItemDecor)
                 return true
             }
 
             R.id.action_span_2 -> {
-                showGridView()
+                spanState = SpanState.GRID
+                updateRecyclerView(2, gridItemDecor, listItemDecor)
                 return true
             }
         }
         return super.onOptionsItemSelected(item)
     }
 
-    private fun showListView() {
-        layoutManager.spanCount = 1
-    }
-
-    private fun showGridView() {
-        layoutManager.spanCount = 2
+    private fun updateRecyclerView(
+        spanCount: Int,
+        addDecor: SpacingItemDecoration,
+        removeDecor: SpacingItemDecoration
+    ) {
+        layoutManager.spanCount = spanCount
+        creaturesRecyclerView.removeItemDecoration(removeDecor)
+        creaturesRecyclerView.addItemDecoration(addDecor)
     }
 }

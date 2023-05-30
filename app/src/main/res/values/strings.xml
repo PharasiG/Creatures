@@ -10,4 +10,6 @@
     <string name="cd_creature_image_in_card_view">creature image in card view</string>
     <string name="menu_span_1">Span 1</string>
     <string name="menu_span_2">Span 2</string>
+    <string name="span_1">Span 1</string>
+    <string name="span_2">Span 2</string>
 </resources>
