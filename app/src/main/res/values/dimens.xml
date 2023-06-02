@@ -10,7 +10,7 @@
     <dimen name="detail_planet_text_size">18sp</dimen>
     <dimen name="creature_view_holder_height">100dp</dimen>
     <dimen name="creature_name_text_size">20sp</dimen>
-    <dimen name="food_image_height">200dp</dimen>
+    <dimen name="food_image_height">150dp</dimen>
     <dimen name="card_elevation">3dp</dimen>
     <dimen name="card_corner_radius">10dp</dimen>
     <dimen name="card_image_size">150dp</dimen>
