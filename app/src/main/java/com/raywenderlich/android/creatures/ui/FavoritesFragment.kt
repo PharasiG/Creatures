@@ -30,10 +30,12 @@
 
 package com.raywenderlich.android.creatures.ui
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -42,7 +44,7 @@ import com.raywenderlich.android.creatures.app.CreaturesAdapter
 import com.raywenderlich.android.creatures.model.CreatureStore.getFavoriteCreatures
 
 
-class FavoritesFragment : Fragment(){
+class FavoritesFragment : Fragment() {
 
     private lateinit var favouritesRecyclerView: RecyclerView
 
@@ -63,7 +65,7 @@ class FavoritesFragment : Fragment(){
     override fun onResume() {
         super.onResume()
 
-        activity?.let {
+        activity?.let { it ->
             getFavoriteCreatures(it)?.let {
                 (favouritesRecyclerView.adapter as CreaturesAdapter).updateFavorites(it)
             }
@@ -76,6 +78,12 @@ class FavoritesFragment : Fragment(){
         favouritesRecyclerView = view.findViewById(R.id.favourites_recycler_view)
         favouritesRecyclerView.adapter = CreaturesAdapter(mutableListOf())
         favouritesRecyclerView.layoutManager = LinearLayoutManager(activity)
+        val heightInPixels = resources.getDimensionPixelSize(R.dimen.list_item_divider_height)
+        context?.let {
+            favouritesRecyclerView.addItemDecoration(
+                DividerItemDecoration(ContextCompat.getColor(it, R.color.black), heightInPixels)
+            )
+        }
     }
 
 }

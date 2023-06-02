@@ -5,18 +5,29 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
 import com.raywenderlich.android.creatures.model.Creature
+import com.raywenderlich.android.creatures.model.CreatureStore.getFood
 import com.raywenderlich.android.creatures.ui.CreatureActivity
 
-class CreaturesAdapter(private val creatures: MutableList<Creature>) :
-    RecyclerView.Adapter<CreaturesAdapter.ViewHolder>() {
+//does not show food recycler perfectly yet
+
+class CreatureAndFoodAdapter(private val creatures: MutableList<Creature>) :
+    RecyclerView.Adapter<CreatureAndFoodAdapter.ViewHolder>() {
+
+    private val viewPool = RecyclerView.RecycledViewPool()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.creature_view_holder, parent, false)
-        return ViewHolder(view)
+            .inflate(R.layout.creatures_and_food_view_holder, parent, false)
+        return ViewHolder(view).let {
+            it.foodRecyclerView.setRecycledViewPool(viewPool)
+            LinearSnapHelper().attachToRecyclerView(it.foodRecyclerView)
+            it
+        }
     }
 
     override fun getItemCount() = creatures.size
@@ -34,8 +45,7 @@ class CreaturesAdapter(private val creatures: MutableList<Creature>) :
     class ViewHolder(itemView: View) : View.OnClickListener, RecyclerView.ViewHolder(itemView) {
         private lateinit var creature: Creature
         private val creatureImage: ImageView = itemView.findViewById(R.id.creature_image)
-        private val fullName: TextView = itemView.findViewById(R.id.fullName)
-        private val nickName: TextView = itemView.findViewById(R.id.nickName)
+        val foodRecyclerView: RecyclerView = itemView.findViewById(R.id.foods_nested_recycler)
         private val context = itemView.context
 
         init {
@@ -47,8 +57,13 @@ class CreaturesAdapter(private val creatures: MutableList<Creature>) :
             creatureImage.setImageResource(
                 context.resources.getIdentifier(creature.uri, null, context.packageName)
             )
-            fullName.text = creature.fullName
-            nickName.text = creature.nickname
+            setUpFoodRecycler(creature)
+        }
+
+        private fun setUpFoodRecycler(creature: Creature) {
+            foodRecyclerView.adapter = FoodAdapter(getFood(creature).toMutableList())
+            foodRecyclerView.layoutManager =
+                LinearLayoutManager(context, LinearLayoutManager.HORIZONTAL, false)
         }
 
         override fun onClick(v: View?) {
