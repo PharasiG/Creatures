@@ -50,7 +50,7 @@ import com.raywenderlich.android.creatures.model.CreatureStore.getCreatures
 class AllFragment : Fragment() {
 
     private lateinit var creaturesRecyclerView: RecyclerView
-    private lateinit var layoutManager: StaggeredGridLayoutManager
+    private lateinit var layoutManager: GridLayoutManager
     private lateinit var listItemDecor: SpacingItemDecoration
     private lateinit var gridItemDecor: SpacingItemDecoration
     private var spanState = SpanState.GRID
@@ -87,7 +87,14 @@ class AllFragment : Fragment() {
 
         creaturesRecyclerView = view.findViewById(R.id.creature_recycler_view)
         creaturesRecyclerView.adapter = CreaturesCardAdapter(getCreatures().toMutableList())
-        layoutManager = StaggeredGridLayoutManager(2, GridLayoutManager.VERTICAL)
+        layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return (creaturesRecyclerView.adapter as CreaturesCardAdapter).spanSizeAtPosition(
+                    position
+                )
+            }
+        }
         creaturesRecyclerView.layoutManager = layoutManager
         creaturesRecyclerView.addItemDecoration(gridItemDecor)
     }
@@ -140,6 +147,7 @@ class AllFragment : Fragment() {
         removeDecor: SpacingItemDecoration
     ) {
         layoutManager.spanCount = spanCount
+        (creaturesRecyclerView.adapter as CreaturesCardAdapter).jupiterSpanSize = spanCount
         creaturesRecyclerView.removeItemDecoration(removeDecor)
         creaturesRecyclerView.addItemDecoration(addDecor)
     }

@@ -30,7 +30,6 @@
 
 package com.raywenderlich.android.creatures.ui
 
-import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -41,8 +40,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
 import com.raywenderlich.android.creatures.app.CreaturesAdapter
-import com.raywenderlich.android.creatures.model.CreatureStore.getFavoriteCreatures
-
+import com.raywenderlich.android.creatures.model.CreatureStore
 
 class FavoritesFragment : Fragment() {
 
@@ -65,9 +63,10 @@ class FavoritesFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        activity?.let { it ->
-            getFavoriteCreatures(it)?.let {
-                (favouritesRecyclerView.adapter as CreaturesAdapter).updateFavorites(it)
+        activity?.let {
+            val composites = CreatureStore.getFavoriteComposites(it)
+            composites.let { compositeList ->
+                (favouritesRecyclerView.adapter as CreaturesAdapter).updateFavorites(compositeList)
             }
         }
     }

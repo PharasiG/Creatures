@@ -33,14 +33,9 @@ class FoodDividerItemDecoration(color: Int, private val height: Int, private val
                 (top + height).toFloat(),
                 paint
             )
-            if ((i + 1) % spanCount != 0)
-                c.drawRect(
-                    right.toFloat(),
-                    top.toFloat(),
-                    (right + height).toFloat(),
-                    bottom.toFloat(),
-                    paint
-                )
+            if ((i + 1) % spanCount != 0) c.drawRect(
+                right.toFloat(), top.toFloat(), (right + height).toFloat(), bottom.toFloat(), paint
+            )
         }
     }
 }
