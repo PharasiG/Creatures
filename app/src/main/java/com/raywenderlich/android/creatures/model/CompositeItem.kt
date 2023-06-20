@@ -2,10 +2,10 @@ package com.raywenderlich.android.creatures.model
 
 class CompositeItem {
 
-    lateinit var creature: Creature
+    var creature: Creature? = null
         private set
 
-    lateinit var header: Header
+    var header: Header? = null
         private set
 
     var isHeader = false
@@ -27,6 +27,7 @@ class CompositeItem {
     }
 
     override fun toString(): String {
-        return if (isHeader) header.name else creature.nickname
+        return if (isHeader) header?.name ?: "Header was actually null"
+        else creature?.nickname ?: "Creature was actually null"
     }
 }

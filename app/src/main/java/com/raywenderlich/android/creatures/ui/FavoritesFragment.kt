@@ -30,12 +30,16 @@
 
 package com.raywenderlich.android.creatures.ui
 
+import android.app.Application
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
@@ -45,6 +49,8 @@ import com.raywenderlich.android.creatures.model.CreatureStore
 class FavoritesFragment : Fragment() {
 
     private lateinit var favouritesRecyclerView: RecyclerView
+    private lateinit var adapter: CreaturesAdapter
+    private lateinit var context: Context
 
     companion object {
         fun newInstance(): FavoritesFragment {
@@ -60,29 +66,37 @@ class FavoritesFragment : Fragment() {
         return inflater.inflate(R.layout.fragment_favorites, container, false)
     }
 
-    override fun onResume() {
-        super.onResume()
-
-        activity?.let {
-            val composites = CreatureStore.getFavoriteComposites(it)
-            composites.let { compositeList ->
-                (favouritesRecyclerView.adapter as CreaturesAdapter).updateFavorites(compositeList)
-            }
-        }
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        context = requireActivity()
+        adapter = CreaturesAdapter(mutableListOf(), context)
 
         favouritesRecyclerView = view.findViewById(R.id.favourites_recycler_view)
-        favouritesRecyclerView.adapter = CreaturesAdapter(mutableListOf())
+        favouritesRecyclerView.adapter = adapter
         favouritesRecyclerView.layoutManager = LinearLayoutManager(activity)
+
         val heightInPixels = resources.getDimensionPixelSize(R.dimen.list_item_divider_height)
-        context?.let {
+        context.let {
             favouritesRecyclerView.addItemDecoration(
                 DividerItemDecoration(ContextCompat.getColor(it, R.color.black), heightInPixels)
             )
         }
+        setupTouchHelper()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        activity?.let {
+            val composites = CreatureStore.getFavoriteComposites(context)
+            composites.let { compositeList ->
+                adapter.updateFavorites(compositeList)
+            }
+        }
+    }
+
+    private fun setupTouchHelper() {
+        val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(adapter))
+        itemTouchHelper.attachToRecyclerView(favouritesRecyclerView)
     }
 
 }

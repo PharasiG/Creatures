@@ -76,7 +76,8 @@ class MainActivity : AppCompatActivity() {
     binding.viewPager.adapter = object : FragmentPagerAdapter(supportFragmentManager, BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
       override fun getItem(position: Int): Fragment {
         if (position == 1) {
-          return FavoritesFragment.newInstance()
+          val fav = FavoritesFragment.newInstance()
+          return fav
         }
         return AllFragment.newInstance()
       }

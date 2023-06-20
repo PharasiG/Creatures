@@ -1,5 +1,8 @@
 package com.raywenderlich.android.creatures.app
 
+import android.app.Application
+import android.content.Context
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,10 +11,17 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
 import com.raywenderlich.android.creatures.model.CompositeItem
+import com.raywenderlich.android.creatures.model.Favorites
+import com.raywenderlich.android.creatures.model.Favorites.saveFavorites
 import com.raywenderlich.android.creatures.ui.CreatureActivity
+import com.raywenderlich.android.creatures.ui.ItemTouchHelperListener
+import java.util.Collections
 
-class CreaturesAdapter(private val compositeItems: MutableList<CompositeItem>) :
-    RecyclerView.Adapter<CreaturesAdapter.ViewHolder>() {
+class CreaturesAdapter(
+    private val compositeItems: MutableList<CompositeItem>,
+    private val context: Context
+) :
+    RecyclerView.Adapter<CreaturesAdapter.ViewHolder>(), ItemTouchHelperListener {
 
     class ViewHolder(itemView: View) : View.OnClickListener, RecyclerView.ViewHolder(itemView) {
         private lateinit var composite: CompositeItem
@@ -32,18 +42,20 @@ class CreaturesAdapter(private val compositeItems: MutableList<CompositeItem>) :
             } else {
                 creatureImage?.setImageResource(
                     context.resources.getIdentifier(
-                        composite.creature.uri, null, context.packageName
+                        composite.creature?.uri, null, context.packageName
                     )
                 )
-                fullName?.text = composite.creature.fullName
-                nickName?.text = composite.creature.nickname
+                fullName?.text = composite.creature?.fullName
+                nickName?.text = composite.creature?.nickname
             }
 
         }
 
         override fun onClick(v: View?) {
-            val intent = CreatureActivity.newIntent(context, composite.creature.id)
-            context.startActivity(intent)
+            composite.creature?.let {
+                val intent = CreatureActivity.newIntent(context, it.id)
+                context.startActivity(intent)
+            }
         }
     }
 
@@ -89,5 +101,38 @@ class CreaturesAdapter(private val compositeItems: MutableList<CompositeItem>) :
         notifyDataSetChanged()
     }
 
+    override fun onItemMove(
+        recyclerView: RecyclerView,
+        fromPosition: Int,
+        toPosition: Int
+    ): Boolean {
+        if (headerMoved(compositeItems, fromPosition, toPosition))
+            return false
+        //updating compositeItems data list
+        if (fromPosition < toPosition) {
+            for (i in fromPosition until toPosition) {
+                Collections.swap(compositeItems, i, i + 1)
+            }
+        } else {
+            for (i in fromPosition downTo toPosition + 1) {
+                Collections.swap(compositeItems, i, i - 1)
+            }
+        }
+        saveFavorites(compositeItems.mapNotNull { it.creature?.id }, context)
+        notifyItemMoved(fromPosition, toPosition)
+        return true
+    }
+
+    private fun headerMoved(
+        compositeItems: MutableList<CompositeItem>, fromPosition: Int, toPosition: Int
+    ): Boolean {
+        for (i in fromPosition..toPosition) {
+            if (compositeItems[i].isHeader) return true
+        }
+        for (i in fromPosition downTo toPosition) {
+            if (compositeItems[i].isHeader) return true
+        }
+        return false
+    }
 }
 
