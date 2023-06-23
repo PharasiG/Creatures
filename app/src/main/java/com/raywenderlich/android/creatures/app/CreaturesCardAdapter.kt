@@ -17,68 +17,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
 import com.raywenderlich.android.creatures.model.Creature
 import com.raywenderlich.android.creatures.ui.CreatureActivity
+import com.raywenderlich.android.creatures.ui.ItemTouchHelperListener
+import java.util.Collections
 
 class CreaturesCardAdapter(private val creatures: MutableList<Creature>) :
-    RecyclerView.Adapter<CreaturesCardAdapter.ViewHolder>() {
-
-    enum class ViewType {
-        JUPITER, MARS, OTHER
-    }
-
-    var jupiterSpanSize = 2
-
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return when (viewType) {
-            ViewType.JUPITER.ordinal -> {
-                val view =
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.creature_card_view_jupiter, parent, false)
-                ViewHolder(view)
-            }
-
-            ViewType.MARS.ordinal -> {
-                val view =
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.creature_card_view_mars, parent, false)
-                ViewHolder(view)
-            }
-
-            ViewType.OTHER.ordinal -> {
-                val view =
-                    LayoutInflater.from(parent.context)
-                        .inflate(R.layout.creature_card_view, parent, false)
-                ViewHolder(view)
-            }
-
-            else -> throw IllegalArgumentException("View type of item in creature card adapter is invalid")
-        }
-
-    }
-
-    override fun getItemCount() = creatures.size
-
-    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(creatures[position])
-    }
-
-    override fun getItemViewType(position: Int): Int {
-        return when (creatures[position].planet) {
-            Constants.JUPITER -> ViewType.JUPITER.ordinal
-            Constants.MARS -> ViewType.MARS.ordinal
-            else -> ViewType.OTHER.ordinal
-        }
-    }
-
-    fun spanSizeAtPosition(position: Int): Int {
-        return if (creatures[position].planet == Constants.JUPITER) jupiterSpanSize
-        else 1
-    }
-//    in-case this adapter is to be used for favorites activity too
-//    fun updateFavorites(favoriteCreatures: List<Creature>) {
-//        creatures.clear()
-//        creatures.addAll(favoriteCreatures)
-//        notifyDataSetChanged()
-//    }
+    RecyclerView.Adapter<CreaturesCardAdapter.ViewHolder>(), ItemTouchHelperListener {
 
     class ViewHolder(itemView: View) : View.OnClickListener, RecyclerView.ViewHolder(itemView) {
         private lateinit var creature: Creature
@@ -170,5 +113,82 @@ class CreaturesCardAdapter(private val creatures: MutableList<Creature>) :
 
     }
 
+    enum class ViewType {
+        JUPITER, MARS, OTHER
+    }
+
+    var jupiterSpanSize = 2
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+        return when (viewType) {
+            ViewType.JUPITER.ordinal -> {
+                val view =
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.creature_card_view_jupiter, parent, false)
+                ViewHolder(view)
+            }
+
+            ViewType.MARS.ordinal -> {
+                val view =
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.creature_card_view_mars, parent, false)
+                ViewHolder(view)
+            }
+
+            ViewType.OTHER.ordinal -> {
+                val view =
+                    LayoutInflater.from(parent.context)
+                        .inflate(R.layout.creature_card_view, parent, false)
+                ViewHolder(view)
+            }
+
+            else -> throw IllegalArgumentException("View type of item in creature card adapter is invalid")
+        }
+
+    }
+
+    override fun getItemCount() = creatures.size
+
+    override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+        holder.bind(creatures[position])
+    }
+
+    override fun getItemViewType(position: Int): Int {
+        return when (creatures[position].planet) {
+            Constants.JUPITER -> ViewType.JUPITER.ordinal
+            Constants.MARS -> ViewType.MARS.ordinal
+            else -> ViewType.OTHER.ordinal
+        }
+    }
+
+    fun spanSizeAtPosition(position: Int): Int {
+        return if (creatures[position].planet == Constants.JUPITER) jupiterSpanSize
+        else 1
+    }
+//    in-case this adapter is to be used for favorites activity too
+//    fun updateFavorites(favoriteCreatures: List<Creature>) {
+//        creatures.clear()
+//        creatures.addAll(favoriteCreatures)
+//        notifyDataSetChanged()
+//    }
+
+    override fun onItemMove(from: Int, to: Int): Boolean {
+        if (from < to) {
+            for (i in from until to) {
+                Collections.swap(creatures, i, i + 1)
+            }
+        } else {
+            for (i in from downTo to + 1) {
+                Collections.swap(creatures, i, i - 1)
+            }
+        }
+        notifyItemMoved(from, to)
+        return true
+    }
+
+    override fun onItemSwipe(viewHolder: RecyclerView.ViewHolder, position: Int) {
+        /*meh, no use here, swipe is disabled and this will never be called, only here because it is sharing
+        touchHelperListener with favorite adapter one*/
+    }
 }
 

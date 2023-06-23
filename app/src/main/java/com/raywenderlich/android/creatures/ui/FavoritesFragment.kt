@@ -30,10 +30,8 @@
 
 package com.raywenderlich.android.creatures.ui
 
-import android.app.Application
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,14 +41,16 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.raywenderlich.android.creatures.R
-import com.raywenderlich.android.creatures.app.CreaturesAdapter
+import com.raywenderlich.android.creatures.app.FavoriteCreaturesAdapter
 import com.raywenderlich.android.creatures.model.CreatureStore
+import java.lang.NullPointerException
 
-class FavoritesFragment : Fragment() {
+class FavoritesFragment : Fragment(), DragListener {
 
     private lateinit var favouritesRecyclerView: RecyclerView
-    private lateinit var adapter: CreaturesAdapter
+    private lateinit var adapter: FavoriteCreaturesAdapter
     private lateinit var context: Context
+    private lateinit var itemTouchHelper: ItemTouchHelper
 
     companion object {
         fun newInstance(): FavoritesFragment {
@@ -68,8 +68,8 @@ class FavoritesFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        context = requireActivity()
-        adapter = CreaturesAdapter(mutableListOf(), context)
+        context = activity?.applicationContext ?: throw NullPointerException()
+        adapter = FavoriteCreaturesAdapter(mutableListOf(), this, context)
 
         favouritesRecyclerView = view.findViewById(R.id.favourites_recycler_view)
         favouritesRecyclerView.adapter = adapter
@@ -95,8 +95,12 @@ class FavoritesFragment : Fragment() {
     }
 
     private fun setupTouchHelper() {
-        val itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(adapter))
+        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallback(adapter))
         itemTouchHelper.attachToRecyclerView(favouritesRecyclerView)
+    }
+
+    override fun onDragged(viewHolder: RecyclerView.ViewHolder) {
+        itemTouchHelper.startDrag(viewHolder)
     }
 
 }

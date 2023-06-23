@@ -65,8 +65,10 @@ object Favorites {
         }
     }
 
-    fun saveFavorites(list: List<Int>, context: Context) {
+    fun saveFavoritesCustom(list: List<Int>, context: Context) {
         saveFavorites(KEY_FAVORITES, list, context)
+        favorites = null
+        favorites = getFavorites(context)
     }
 
     fun getFavorites(context: Context): MutableList<Int>? {
