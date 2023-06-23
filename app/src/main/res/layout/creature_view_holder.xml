@@ -41,4 +41,15 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="Full Name" />
 
+    <ImageView
+        android:id="@+id/dragHolder"
+        android:layout_width="@dimen/drag_holder_height"
+        android:layout_height="@dimen/drag_holder_height"
+        android:layout_marginEnd="@dimen/padding_standard"
+        android:contentDescription="@string/cd_drag_holder"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/img_reorder_creature_favorite" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

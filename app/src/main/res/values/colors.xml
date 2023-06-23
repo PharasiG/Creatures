@@ -5,5 +5,7 @@
     <color name="colorAccent">#8559da</color>
     <color name="redHeart">#FF0000</color>
     <color name="black">#000000</color>
+    <color name="selectedItem">#E1BEE7</color>
+    <color name="white">#FFFFFF</color>
     <!--  <color name="pink_bg">#DFEA397F</color>-->
 </resources>

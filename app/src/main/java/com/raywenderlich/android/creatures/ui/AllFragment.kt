@@ -40,6 +40,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.google.android.material.resources.MaterialResources.getDimensionPixelSize
@@ -53,6 +54,8 @@ class AllFragment : Fragment() {
     private lateinit var layoutManager: GridLayoutManager
     private lateinit var listItemDecor: SpacingItemDecoration
     private lateinit var gridItemDecor: SpacingItemDecoration
+    private lateinit var itemTouchHelper: ItemTouchHelper
+    private lateinit var adapter: CreaturesCardAdapter
     private var spanState = SpanState.GRID
 
     private enum class SpanState {
@@ -86,7 +89,8 @@ class AllFragment : Fragment() {
         gridItemDecor = SpacingItemDecoration(spacing, 2)
 
         creaturesRecyclerView = view.findViewById(R.id.creature_recycler_view)
-        creaturesRecyclerView.adapter = CreaturesCardAdapter(getCreatures().toMutableList())
+        adapter = CreaturesCardAdapter(getCreatures().toMutableList())
+        creaturesRecyclerView.adapter = adapter
         layoutManager = GridLayoutManager(context, 2, GridLayoutManager.VERTICAL, false)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
@@ -97,6 +101,12 @@ class AllFragment : Fragment() {
         }
         creaturesRecyclerView.layoutManager = layoutManager
         creaturesRecyclerView.addItemDecoration(gridItemDecor)
+        setupTouchHelper()
+    }
+
+    private fun setupTouchHelper() {
+        itemTouchHelper = ItemTouchHelper(ItemTouchHelperCallbackAll(adapter))
+        itemTouchHelper.attachToRecyclerView(creaturesRecyclerView)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
